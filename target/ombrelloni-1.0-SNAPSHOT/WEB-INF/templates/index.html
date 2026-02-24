@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titoloProgetto}">Lido Codici Sballati</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+</head>
+<body>
+<div class="container">
+    <header><h1 th:text="${titoloProgetto}">LIDO CODICI SBALLATI</h1></header>
+    <nav>
+        <a th:href="@{/}" class="active">Home</a>
+        <a th:href="@{/accesso}">Accedi</a>
+        <a th:href="@{/registrazione}">Registrati</a>
+    </nav>
+    <main>
+        <div class="glass-panel" style="text-align: center; padding: 50px 30px; margin-top: 5vh;">
+            <h1 style="font-size: 3rem; margin-bottom: 20px;">LIDO CODICI SBALLATI</h1>
+            <p style="font-size: 1.3rem; color: #5d4037; margin-bottom: 40px;">
+                La tua oasi esclusiva ti aspetta.<br>Prenota il tuo posto al sole con un click.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center;">
+                <a th:href="@{/accesso}" class="button">Accedi</a>
+                <a th:href="@{/registrazione}" class="button button-secondary">Registrati</a>
+            </div>
+        </div>
+    </main>
+    <footer>© 2026 - Lido Codici Sballati</footer>
+</div>
+</body>
+</html>

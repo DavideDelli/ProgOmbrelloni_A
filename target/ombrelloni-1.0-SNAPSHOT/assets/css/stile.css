@@ -1,0 +1,277 @@
+/* STILE "LIDO MAREA RESTORED" - 2025 */
+/* Concept: Colori caldi originali, Glass Effect bianco/traslucido, Onde Marea */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap');
+
+body { 
+    margin: 0; 
+    font-family: 'Outfit', sans-serif;
+    /* RIPRISTINATO SFONDO CALDO (Sabbia -> Caffè) */
+    background: linear-gradient(135deg, #c69c6d 0%, #8b5a2b 50%, #5d3a1a 100%);
+    background-attachment: fixed;
+    color: #3e2723; 
+    line-height: 1.6; 
+    min-height: 100vh;
+}
+
+.container { display: flex; flex-direction: column; min-height: 100vh; }
+a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+
+/* =================================== */
+/* HEADER & NAVIGAZIONE                */
+/* =================================== */
+
+header { 
+    background: #4e342e; /* Marrone solido caldo */
+    text-align: center; 
+    padding: 1.5rem; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-weight: 800;
+    font-size: 2rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: linear-gradient(to right, #ffe0b2, #fff, #ffe0b2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+nav { 
+    background: rgba(255, 255, 255, 0.15); /* Glass Chiaro */
+    backdrop-filter: blur(10px);
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    z-index: 99;
+}
+
+nav a { 
+    display: inline-block;
+    padding: 15px 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    position: relative;
+    transition: color 0.3s;
+}
+
+nav a:hover { color: #fff; }
+nav a.active { color: #ffcc80; font-weight: 700; }
+nav a.active::after {
+    content: ''; position: absolute; bottom: 0; left: 20px; right: 20px; height: 3px;
+    background: #ffcc80; border-radius: 3px 3px 0 0;
+    box-shadow: 0 0 10px #ffcc80;
+}
+
+/* =================================== */
+/* COMPONENTI GLASS (Ripristinati)     */
+/* =================================== */
+
+/* Classe base per pannelli */
+.glass-panel, .control-panel {
+    /* BIANCO SEMI-TRASPARENTE (Vero Glass) */
+    background: rgba(255, 255, 255, 0.25); 
+    backdrop-filter: blur(25px) saturate(120%);
+    -webkit-backdrop-filter: blur(25px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.4); 
+    border-radius: 20px;
+    /* Ombra marrone calda */
+    box-shadow: 0 15px 35px rgba(93, 64, 55, 0.25);
+    color: #3e2723; /* Testo scuro su sfondo chiaro */
+    padding: 30px;
+    margin: 20px auto;
+    width: 94%;
+    max-width: 1200px;
+    box-sizing: border-box;
+}
+
+.control-panel {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 30px; margin: 15px auto;
+    flex-wrap: wrap; /* Aggiunto per schermi piccoli */
+    gap: 20px;
+}
+
+.glass-panel h1, .glass-panel h2, .glass-panel h3 {
+    color: #4e342e;
+    margin-top: 0;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* =================================== */
+/* FORM & INPUTS                       */
+/* =================================== */
+
+.form-group label, .search-group label { 
+    display: block; font-weight: 700; margin-bottom: 8px; 
+    color: #3e2723; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;
+}
+
+input[type="text"], input[type="password"], input[type="date"], input[type="email"], select { 
+    width: 100%; padding: 12px 15px; border-radius: 12px; 
+    border: 1px solid rgba(255, 255, 255, 0.6); 
+    background: rgba(255, 255, 255, 0.5); /* Input chiaro */
+    color: #3e2723;
+    font-family: inherit; font-weight: 600; font-size: 1rem;
+    outline: none; transition: all 0.3s; box-sizing: border-box;
+}
+input:focus, select:focus { 
+    background: #fff; border-color: #8d6e63; 
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4); 
+}
+
+/* Bottoni */
+.button, button, .button-link {
+    display: inline-block; padding: 12px 30px;
+    background: linear-gradient(135deg, #8d6e63, #5d4037); /* Marrone elegante */
+    color: #fff; border: none; border-radius: 50px;
+    font-weight: 700; font-size: 1rem; cursor: pointer;
+    box-shadow: 0 4px 15px rgba(93, 64, 55, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-transform: uppercase; letter-spacing: 1px;
+}
+.button:hover, button:hover, .button-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(93, 64, 55, 0.4);
+    background: linear-gradient(135deg, #a1887f, #6d4c41);
+}
+.button-secondary { background: rgba(255,255,255,0.3); color: #3e2723; border: 1px solid rgba(255,255,255,0.5); box-shadow: none; }
+.button-secondary:hover { background: rgba(255,255,255,0.6); }
+
+/* =================================== */
+/* PRENOTAZIONI                        */
+/* =================================== */
+.prenotazione-card {
+    background: rgba(255, 255, 255, 0.6); /* Card chiara */
+    border-radius: 16px; padding: 20px; margin-bottom: 20px;
+    border-left: 6px solid #8d6e63;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+.prenotazione-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+.prenotazione-details p { margin: 5px 0; color: #555; }
+.prenotazione-details strong { color: #3e2723; }
+
+/* =================================== */
+/* MAPPA ELEMENTS                      */
+/* =================================== */
+.spiaggia-mappa-container { 
+    width: 100%; height: calc(100vh - 200px); 
+    border-radius: 30px 30px 0 0; 
+    overflow: hidden; position: relative;
+    background-color: #e0c29e; 
+    border: 6px solid rgba(255,255,255,0.3); border-bottom: none;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
+}
+
+.mare { height: 18%; background: linear-gradient(180deg, #1976d2 0%, #42a5f5 100%); position: relative; z-index: 1; }
+.waves-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; overflow: hidden; }
+.wave { position: absolute; bottom: 0; left: 0; width: 200%; height: 100px; background-repeat: repeat-x; background-position: bottom; background-size: 50% 100px; transform-origin: center bottom; }
+.wave-1 { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 100' preserveAspectRatio='none'%3E%3Cpath d='M0 50 Q 200 100 400 50 T 800 50 V 100 H 0 Z' fill='%232196f3' opacity='0.7'/%3E%3C/svg%3E"); height: 120px; animation: flow 20s linear infinite, tide 8s ease-in-out infinite alternate; z-index: 1; }
+.wave-2 { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 100' preserveAspectRatio='none'%3E%3Cpath d='M0 60 Q 200 20 400 60 T 800 60 V 100 H 0 Z' fill='%2364b5f6' opacity='0.6'/%3E%3C/svg%3E"); height: 90px; bottom: -10px; animation: flow 15s linear infinite reverse, tide 6s ease-in-out infinite alternate-reverse; z-index: 2; }
+.wave-3 { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 100' preserveAspectRatio='none'%3E%3Cpath d='M0 70 Q 200 40 400 70 T 800 70 V 100 H 0 Z' fill='%23ffffff' opacity='0.8'/%3E%3C/svg%3E"); height: 60px; bottom: -20px; animation: flow 10s linear infinite, crash 4s ease-in-out infinite; z-index: 3; }
+@keyframes flow { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@keyframes tide { 0% { transform: translateY(10px) translateX(0); } 100% { transform: translateY(-10px) translateX(-20px); } }
+@keyframes crash { 0% { transform: scaleY(1) translateY(0) translateX(0); opacity: 0.6; } 50% { transform: scaleY(1.5) translateY(-15px) translateX(-10px); opacity: 0.9; } 100% { transform: scaleY(1) translateY(0) translateX(0); opacity: 0.6; } }
+
+.sabbia { height: 82%; background-color: #e0c29e; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"); position: relative; z-index: 2; }
+.wooden-path { position: absolute; top: 0; bottom: 80px; width: 55px; background: #5d4037; background-image: repeating-linear-gradient(to bottom, #5d4037, #3e2723 2px, #5d4037 3px, #5d4037 15px); box-shadow: 4px 0 10px rgba(0,0,0,0.15); border-radius: 4px; }
+.avenue-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 80px; z-index: 7; }
+.sidewalk { position: absolute; bottom: 25px; width: 100%; height: 55px; background: #d7ccc8; background-image: linear-gradient(90deg, rgba(255,255,255,0.5) 2px, transparent 2px); background-size: 50px 100%; }
+.road { position: absolute; bottom: 0; width: 100%; height: 25px; background: #37474f; border-top: 2px solid #cfd8dc; }
+.settore-label { position: absolute; top: 1%; transform: translateX(-50%); color: rgba(62, 39, 35, 0.15); font-weight: 900; font-size: 6rem; pointer-events: none; font-family: 'Times New Roman', serif; }
+.ombrellone-wrapper { position: absolute; width: 44px; height: 44px; margin: -22px; cursor: pointer; transition: transform 0.4s; display: flex; justify-content: center; align-items: center; z-index: 10; }
+.ombrellone-wrapper:hover { transform: scale(1.4); z-index: 100; }
+.ombrellone-icon { width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 8px 20px rgba(0,0,0,0.15); border: 2px solid #fff; position: relative; }
+.ombrellone-icon::after { content: ''; position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; background: #fff; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+.ombrellone-wrapper.disponibile .ombrellone-icon { background: repeating-conic-gradient(#66bb6a 0deg 20deg, #f1f8e9 20deg 40deg); }
+.ombrellone-wrapper.disponibile.vip .ombrellone-icon { background: repeating-conic-gradient(#ffa726 0deg 20deg, #fff3e0 20deg 40deg); }
+.ombrellone-wrapper.occupato .ombrellone-icon { background: #cfd8dc; filter: grayscale(1); opacity: 0.9; }
+.ombrellone-numero { position: absolute; background: #fff; color: #3e2723; padding: 4px 8px; border-radius: 8px; font-size: 14px; font-weight: 800; box-shadow: 0 3px 8px rgba(0,0,0,0.2); border: 1px solid #d7ccc8; z-index: 15; pointer-events: none; min-width: 15px; text-align: center; }
+.pos-numero-dx .ombrellone-numero { left: 130%; top: 50%; transform: translateY(-50%); }
+.pos-numero-sx .ombrellone-numero { right: 130%; top: 50%; transform: translateY(-50%); }
+
+/* Controlli Mappa - MODIFICATO */
+.search-group form { display: flex; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
+
+.radio-group { 
+    background: rgba(255, 255, 255, 0.25); 
+    padding: 6px; 
+    border-radius: 50px; 
+    display: inline-flex; 
+    border: 1px solid rgba(255,255,255,0.4); 
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.radio-option { margin: 0; position: relative; cursor: pointer; }
+
+/* Nascondiamo il radio button nativo mantenendo l'accessibilità */
+.radio-option input[type="radio"] { 
+    position: absolute; 
+    opacity: 0; 
+    width: 0; 
+    height: 0; 
+}
+
+/* Stile del bottone visuale */
+.radio-option span { 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Spazio tra icona e testo */
+    padding: 10px 24px; 
+    border-radius: 40px; 
+    font-size: 0.9rem; 
+    font-weight: 600; 
+    color: #4e342e; 
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    white-space: nowrap;
+}
+
+/* Icone SVG dentro lo span */
+.radio-option span svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    fill: none;
+    transition: transform 0.3s ease;
+}
+
+/* Hover */
+.radio-option:hover span { 
+    background: rgba(255, 255, 255, 0.15); 
+    color: #3e2723; 
+}
+.radio-option:hover span svg { transform: scale(1.1); }
+
+/* Stato ATTIVO (Checked) */
+.radio-option input:checked + span { 
+    background: linear-gradient(135deg, #d84315, #bf360c); 
+    color: #fff; 
+    box-shadow: 0 4px 15px rgba(216, 67, 21, 0.35); 
+    transform: translateY(-1px);
+}
+
+/* Legenda */
+.legend-group { display: flex; gap: 20px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; color: #3e2723; }
+.legend-box { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+.legend-box.disponibile { background: #66bb6a; }
+.legend-box.vip { background: #ffa726; }
+.legend-box.occupato { background: #bdbdbd; }
+
+.messaggio { margin: 10px auto; padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.9); color: #333; max-width: 600px; text-align: center; border: 1px solid #e0e0e0; }
+.messaggio.errore { background: #ffebee; color: #c62828; border-color: #ffcdd2; }
+.messaggio-conferma { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; padding: 15px; border-radius: 12px; max-width: 600px; margin: 10px auto; text-align: center; }
+
+footer { margin-top: auto; padding: 20px; text-align: center; color: rgba(255,255,255,0.7); font-size: 0.9rem; background: rgba(0,0,0,0.2); backdrop-filter: blur(5px); }
