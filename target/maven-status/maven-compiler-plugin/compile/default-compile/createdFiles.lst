@@ -1,3 +1,9 @@
-it/unibg/ombrelloni/config/DatabaseManager.class
-it/unibg/ombrelloni/controllers/HomeServlet.class
+it/unibg/ombrelloni/controllers/LoginServlet.class
+it/unibg/ombrelloni/controllers/AuthServlet.class
 it/unibg/ombrelloni/config/ThymeleafListener.class
+it/unibg/ombrelloni/controllers/RegistrazioneServlet.class
+it/unibg/ombrelloni/controllers/HomeServlet.class
+it/unibg/ombrelloni/controllers/MappaServlet.class
+it/unibg/ombrelloni/models/Cliente.class
+it/unibg/ombrelloni/dao/ClienteDAO.class
+it/unibg/ombrelloni/config/DatabaseManager.class

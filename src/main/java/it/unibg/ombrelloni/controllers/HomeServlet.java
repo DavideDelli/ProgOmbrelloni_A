@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 // Mappiamo la servlet sulla root del sito e su /index.php per retrocompatibilità
-@WebServlet(urlPatterns = {"/", "/index.php"})
+@WebServlet(urlPatterns = {"/home", "/index.php"})
 public class HomeServlet extends HttpServlet {
 
     private TemplateEngine templateEngine;

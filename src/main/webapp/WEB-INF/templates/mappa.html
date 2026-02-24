@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mappa Spiaggia - Lido Codici Sballati</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+    <style>
+        .radio-option span {
+            display: flex !important; align-items: center !important; justify-content: center !important;
+            height: 42px !important; padding: 0 25px !important; box-sizing: border-box !important;
+        }
+        .radio-option span svg { margin-right: 8px; margin-top: -1px; }
+    </style>
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header><h1 th:text="'Lido Codici Sballati - Ciao ' + ${nomeCliente}">Lido Codici Sballati</h1></header>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/mappa}" class="active">Mappa</a>
+        <a th:href="@{/le_mie_prenotazioni}">Prenotazioni</a>
+        <a th:href="@{/profilo}">Profilo</a>
+    </nav>
+
+    <div class="control-panel">
+        <div class="search-group">
+            <form method="GET" th:action="@{/mappa}">
+                <div>
+                    <label for="data_ricerca">DATA:</label>
+                    <input type="date" id="data_ricerca" name="data_ricerca" th:value="${dataSelezionata}" required onchange="this.form.submit()" />
+                </div>
+                <div>
+                    <label style="visibility: hidden;">TIPO:</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="tipo_prenotazione" value="giornaliero" onchange="this.form.submit()" th:checked="${tipoPrenotazione == 'giornaliero'}">
+                            <span>Giornaliero</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="tipo_prenotazione" value="settimanale" onchange="this.form.submit()" th:checked="${tipoPrenotazione == 'settimanale'}">
+                            <span>Settimanale</span>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="legend-group">
+            <div class="legend-item"><div class="legend-box disponibile"></div> Libero</div>
+            <div class="legend-item"><div class="legend-box vip"></div> VIP</div>
+            <div class="legend-item"><div class="legend-box occupato"></div> Occupato</div>
+        </div>
+    </div>
+
+    <main>
+        <div th:if="${not #strings.isEmpty(messaggioErrore)}" class="messaggio errore">
+            <p th:text="${messaggioErrore}">Errore data non trovata</p>
+        </div>
+
+        <div th:if="${#strings.isEmpty(messaggioErrore) and not #lists.isEmpty(ombrelloni)}" class="spiaggia-mappa-container">
+            <div class="mare"></div>
+
+            <div class="sabbia">
+                <div class="wooden-path" style="left: 25%; bottom: 40px;"></div>
+                <div class="wooden-path" style="left: 50%; bottom: 40px;"></div>
+                <div class="wooden-path" style="left: 75%; bottom: 40px;"></div>
+
+                <div class="ombrelloni-container">
+                    <th:block th:each="omb : ${ombrelloni}"
+                              th:with="
+                                isA=${#strings.equals(omb.settore, 'A')},
+                                isB=${#strings.equals(omb.settore, 'B')},
+                                isC=${#strings.equals(omb.settore, 'C')},
+                                baseLeft=${isA ? 9.0 : (isB ? 34.0 : (isC ? 59.0 : 84.0))},
+                                topPos=${14.0 + (omb.numPostoFila - 1) * 8.2},
+                                leftPos=${baseLeft + (omb.numFila - 1) * 9.5},
+                                latoNumero=${omb.numFila % 2 != 0 ? 'pos-numero-dx' : 'pos-numero-sx'},
+                                statusClass=${omb.occupato ? 'occupato' : 'disponibile'},
+                                vipClass=${#strings.equals(omb.codTipologia, 'VIP') ? 'vip' : ''}
+                              ">
+
+                        <div th:if="${omb.occupato}"
+                             th:class="'ombrellone-wrapper ' + ${latoNumero} + ' ' + ${statusClass} + ' ' + ${vipClass}"
+                             th:style="|top: ${topPos}%; left: ${leftPos}%;|">
+                            <div class="ombrellone-icon"></div>
+                            <span class="ombrellone-numero" th:text="${omb.numPostoFila}"></span>
+                        </div>
+
+                        <a th:unless="${omb.occupato}"
+                           th:href="@{/prenota(id=${omb.id}, data=${dataSelezionata}, tipo=${tipoPrenotazione})}"
+                           th:class="'ombrellone-wrapper ' + ${latoNumero} + ' ' + ${statusClass} + ' ' + ${vipClass}"
+                           th:style="|top: ${topPos}%; left: ${leftPos}%;|">
+                            <div class="ombrellone-icon"></div>
+                            <span class="ombrellone-numero" th:text="${omb.numPostoFila}"></span>
+                        </a>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
