@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Le Mie Prenotazioni - Lido Codici Sballati</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+    <style>
+        .table-prenotazioni { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .table-prenotazioni th, .table-prenotazioni td { padding: 12px 15px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+        .table-prenotazioni th { background-color: rgba(62, 39, 35, 0.1); font-weight: bold; color: #3e2723; }
+        .table-prenotazioni tr:hover { background-color: rgba(255, 255, 255, 0.2); }
+    </style>
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header>Le Mie Prenotazioni</header>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/mappa}">Mappa</a>
+        <a th:href="@{/le_mie_prenotazioni}" class="active">Prenotazioni</a>
+        <a th:href="@{/profilo}">Profilo</a>
+    </nav>
+    <main>
+        <div class="glass-panel" style="max-width: 900px; margin: 0 auto; padding: 30px;">
+
+            <div th:if="${not #strings.isEmpty(messaggioErrore)}" class="messaggio errore">
+                <p th:text="${messaggioErrore}"></p>
+            </div>
+
+            <div th:if="${#lists.isEmpty(prenotazioni)}">
+                <h3 style="text-align: center; color: #3e2723;">Non hai ancora effettuato nessuna prenotazione!</h3>
+                <div style="text-align: center; margin-top: 20px;">
+                    <a th:href="@{/mappa}" class="button">Vai alla Mappa e prenota ora</a>
+                </div>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(prenotazioni)}">
+                <h2 style="color: #3e2723; margin-bottom: 20px;">Storico Contratti</h2>
+                <table class="table-prenotazioni">
+                    <thead>
+                    <tr>
+                        <th>N. Contratto</th>
+                        <th>Data</th>
+                        <th>Ombrellone</th>
+                        <th>Tipologia</th>
+                        <th>Importo Pagato</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="p : ${prenotazioni}">
+                        <td><strong th:text="'#' + ${p.numeroContratto}"></strong></td>
+                        <td>
+                            <span th:text="${#dates.format(p.dataInizio, 'dd/MM/yyyy')}"></span>
+                            <span th:if="${p.dataFine != null}" th:text="' - ' + ${#dates.format(p.dataFine, 'dd/MM/yyyy')}"></span>
+                        </td>
+                        <td th:text="'Settore ' + ${p.settore} + ' | Fila ' + ${p.fila} + ' | Posto ' + ${p.posto}"></td>
+                        <td>
+                            <span th:if="${p.tipologia == 'VIP'}" class="legend-box vip" style="display:inline-block; vertical-align:middle; width:12px; height:12px; margin-right:5px;"></span>
+                            <span th:text="${p.tipologia}"></span>
+                        </td>
+                        <td><strong th:text="${p.importo} + ' €'"></strong></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+    <footer>© 2026 - Lido Codici Sballati</footer>
+</div>
+</body>
+</html>

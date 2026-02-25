@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Conferma Prenotazione - Lido Codici Sballati</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header>Riepilogo Prenotazione</header>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/mappa}">Mappa</a>
+        <a th:href="@{/le_mie_prenotazioni}">Prenotazioni</a>
+        <a th:href="@{/profilo}">Profilo</a>
+    </nav>
+    <main>
+        <div class="glass-panel form-prenotazione" style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <h2 style="color: #3e2723; margin-bottom: 20px;">Quasi fatto, <span th:text="${nomeCliente}"></span>!</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 30px;">
+                Stai per prenotare l'ombrellone con ID: <strong th:text="${idOmbrellone}"></strong><br>
+                Per la data: <strong th:text="${dataSelezionata}"></strong><br>
+                Tipologia: <strong style="text-transform: capitalize;" th:text="${tipoPrenotazione}"></strong>
+            </p>
+
+            <form th:action="@{/salva_prenotazione}" method="POST">
+                <input type="hidden" name="id_ombrellone" th:value="${idOmbrellone}">
+                <input type="hidden" name="data_prenotazione" th:value="${dataSelezionata}">
+                <input type="hidden" name="tipo_prenotazione" th:value="${tipoPrenotazione}">
+
+                <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
+                    <a th:href="@{/mappa}" class="button button-secondary">Annulla e Torna alla Mappa</a>
+                    <button type="submit" style="background-color: #4CAF50;">Conferma e Paga</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <footer>© 2026 - Lido Codici Sballati</footer>
+</div>
+</body>
+</html>

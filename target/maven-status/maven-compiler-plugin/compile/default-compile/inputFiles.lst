@@ -4,6 +4,9 @@
 /home/davide/Documenti/Codes/ProgOmbrelloni_A/src/main/java/it/unibg/ombrelloni/controllers/HomeServlet.java
 /home/davide/Documenti/Codes/ProgOmbrelloni_A/src/main/java/it/unibg/ombrelloni/controllers/LoginServlet.java
 /home/davide/Documenti/Codes/ProgOmbrelloni_A/src/main/java/it/unibg/ombrelloni/controllers/MappaServlet.java
+/home/davide/Documenti/Codes/ProgOmbrelloni_A/src/main/java/it/unibg/ombrelloni/controllers/PrenotaServlet.java
+/home/davide/Documenti/Codes/ProgOmbrelloni_A/src/main/java/it/unibg/ombrelloni/controllers/PrenotazioniServlet.java
 /home/davide/Documenti/Codes/ProgOmbrelloni_A/src/main/java/it/unibg/ombrelloni/controllers/RegistrazioneServlet.java
+/home/davide/Documenti/Codes/ProgOmbrelloni_A/src/main/java/it/unibg/ombrelloni/controllers/SalvaPrenotazioneServlet.java
 /home/davide/Documenti/Codes/ProgOmbrelloni_A/src/main/java/it/unibg/ombrelloni/dao/ClienteDAO.java
 /home/davide/Documenti/Codes/ProgOmbrelloni_A/src/main/java/it/unibg/ombrelloni/models/Cliente.java

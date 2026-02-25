@@ -1,0 +1,87 @@
+package it.unibg.ombrelloni.controllers;
+
+import it.unibg.ombrelloni.config.DatabaseManager;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
+import it.unibg.ombrelloni.config.ThymeleafListener;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@WebServlet("/le_mie_prenotazioni")
+public class PrenotazioniServlet extends HttpServlet {
+
+    private TemplateEngine templateEngine;
+
+    @Override
+    public void init() throws ServletException {
+        this.templateEngine = (TemplateEngine) getServletContext().getAttribute(ThymeleafListener.TEMPLATE_ENGINE_ATTR);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("codice_cliente") == null) {
+            response.sendRedirect(request.getContextPath() + "/accesso");
+            return;
+        }
+
+        String codiceCliente = (String) session.getAttribute("codice_cliente");
+        List<Map<String, Object>> prenotazioni = new ArrayList<>();
+        String messaggioErrore = "";
+
+        try (Connection conn = DatabaseManager.getInstance().getConnection()) {
+            // Uniamo contratto, giornodisponibilita e ombrellone per avere tutti i dettagli
+            // Usiamo DISTINCT o GROUP BY per evitare duplicati in caso di abbonamenti settimanali
+            String sql = "SELECT c.numProgr, c.data, c.dataFine, c.importo, o.settore, o.numFila, o.numPostoFila, o.codTipologia " +
+                    "FROM contratto c " +
+                    "JOIN giornodisponibilita gd ON c.numProgr = gd.numProgrContratto " +
+                    "JOIN ombrellone o ON gd.idOmbrellone = o.id " +
+                    "WHERE c.codiceCliente = ? " +
+                    "GROUP BY c.numProgr, c.data, c.dataFine, c.importo, o.settore, o.numFila, o.numPostoFila, o.codTipologia " +
+                    "ORDER BY c.data DESC";
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, codiceCliente);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        Map<String, Object> preno = new HashMap<>();
+                        preno.put("numeroContratto", rs.getInt("numProgr"));
+                        preno.put("dataInizio", rs.getDate("data"));
+                        preno.put("dataFine", rs.getDate("dataFine"));
+                        preno.put("importo", rs.getDouble("importo"));
+                        preno.put("settore", rs.getString("settore"));
+                        preno.put("fila", rs.getInt("numFila"));
+                        preno.put("posto", rs.getInt("numPostoFila"));
+                        preno.put("tipologia", rs.getString("codTipologia"));
+                        prenotazioni.add(preno);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            messaggioErrore = "Impossibile recuperare lo storico delle prenotazioni.";
+            e.printStackTrace();
+        }
+
+        WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
+        ctx.setVariable("prenotazioni", prenotazioni);
+        ctx.setVariable("messaggioErrore", messaggioErrore);
+
+        templateEngine.process("prenotazioni", ctx, response.getWriter());
+    }
+}

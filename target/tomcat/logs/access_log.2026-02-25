@@ -1,0 +1,10 @@
+127.0.0.1 - - [25/Feb/2026:17:42:09 +0100] "GET /le_mie_prenotazioni HTTP/1.1" 302 - http-bio-8080-exec-1 12
+127.0.0.1 - - [25/Feb/2026:17:42:09 +0100] "GET /accesso HTTP/1.1" 200 1390 http-bio-8080-exec-2 111
+127.0.0.1 - - [25/Feb/2026:17:42:12 +0100] "POST /auth/processa_accesso HTTP/1.1" 302 - http-bio-8080-exec-3 71
+127.0.0.1 - - [25/Feb/2026:17:42:12 +0100] "GET /mappa HTTP/1.1" 200 37330 http-bio-8080-exec-4 55
+127.0.0.1 - - [25/Feb/2026:17:42:15 +0100] "GET /le_mie_prenotazioni HTTP/1.1" 200 3559 http-bio-8080-exec-5 8
+127.0.0.1 - - [25/Feb/2026:17:42:22 +0100] "GET /mappa HTTP/1.1" 200 37330 http-bio-8080-exec-6 17
+127.0.0.1 - - [25/Feb/2026:17:42:29 +0100] "GET /le_mie_prenotazioni HTTP/1.1" 200 3559 http-bio-8080-exec-7 5
+127.0.0.1 - - [25/Feb/2026:17:42:39 +0100] "GET /mappa HTTP/1.1" 200 37330 http-bio-8080-exec-8 13
+127.0.0.1 - - [25/Feb/2026:17:42:40 +0100] "GET /prenota?id=44&data=2026-06-01&tipo=giornaliero HTTP/1.1" 200 1763 http-bio-8080-exec-9 2
+127.0.0.1 - - [25/Feb/2026:17:42:43 +0100] "GET /mappa HTTP/1.1" 200 37330 http-bio-8080-exec-10 11
