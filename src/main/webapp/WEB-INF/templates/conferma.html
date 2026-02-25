@@ -10,26 +10,49 @@
     <header>Riepilogo Prenotazione</header>
     <nav>
         <a th:href="@{/}">Home</a>
-        <a th:href="@{/mappa}">Mappa</a>
-        <a th:href="@{/le_mie_prenotazioni}">Prenotazioni</a>
+        <a th:href="@{/mappa}">Mappa Spiaggia</a>
+        <a th:href="@{/le_mie_prenotazioni}">Le mie Prenotazioni</a>
         <a th:href="@{/profilo}">Profilo</a>
     </nav>
     <main>
-        <div class="glass-panel form-prenotazione" style="max-width: 600px; margin: 0 auto; text-align: center;">
-            <h2 style="color: #3e2723; margin-bottom: 20px;">Quasi fatto, <span th:text="${nomeCliente}"></span>!</h2>
-            <p style="font-size: 1.2rem; margin-bottom: 30px;">
-                Stai per prenotare l'ombrellone con ID: <strong th:text="${idOmbrellone}"></strong><br>
-                Per la data: <strong th:text="${dataSelezionata}"></strong><br>
-                Tipologia: <strong style="text-transform: capitalize;" th:text="${tipoPrenotazione}"></strong>
-            </p>
+        <div th:if="${not #strings.isEmpty(errore)}" class="messaggio errore glass-panel">
+            <h2>Errore</h2>
+            <p th:text="${errore}"></p>
+            <a th:href="@{/mappa}" class="button" style="margin-top: 1rem;">Torna alla Mappa</a>
+        </div>
 
-            <form th:action="@{/salva_prenotazione}" method="POST">
+        <div th:if="${#strings.isEmpty(errore)}" class="form-prenotazione glass-panel" style="max-width: 600px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="font-size: 2.2em; border: none; color: #FFF;">Un ultimo passo...</h2>
+                <p style="font-size: 1.2em; margin-top: 0;">Controlla i dettagli e seleziona il pacchetto.</p>
+            </div>
+
+            <div class="riepilogo-box" style="background: rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.2); box-shadow: none;">
+                <p><strong>Tipo Prenotazione:</strong> <span style="text-transform: capitalize;" th:text="${tipoPrenotazione}"></span></p>
+                <p><strong>Data Inizio:</strong> <strong th:text="${dataSelezionata}"></strong></p>
+                <p><strong>Ombrellone:</strong> Settore <span th:text="${ombrellone.settore}"></span>, Fila <span th:text="${ombrellone.numFila}"></span>, Posto <span th:text="${ombrellone.numPostoFila}"></span></p>
+            </div>
+
+            <form th:action="@{/salva_prenotazione}" method="POST" style="margin-top: 2rem;">
                 <input type="hidden" name="id_ombrellone" th:value="${idOmbrellone}">
                 <input type="hidden" name="data_prenotazione" th:value="${dataSelezionata}">
                 <input type="hidden" name="tipo_prenotazione" th:value="${tipoPrenotazione}">
 
-                <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
-                    <a th:href="@{/mappa}" class="button button-secondary">Annulla e Torna alla Mappa</a>
+                <fieldset style="border: 1px solid rgba(255,255,255,0.2); background: transparent;">
+                    <legend style="color: #FFF;">Scegli il tuo Pacchetto</legend>
+                    <div class="form-group">
+                        <th:block th:each="tariffa, iterStat : ${tariffe}">
+                            <label style="display: block; margin-bottom: 10px; background: rgba(0,0,0,0.1); padding: 10px; border-radius: 8px;">
+                                <input type="radio" name="cod_tariffa" th:value="${tariffa.codice}" th:checked="${iterStat.index == 0}">
+                                <span th:text="${tariffa.descrizione}"></span>
+                                (<strong th:text="${tariffa.prezzo} + ' €'"></strong>)
+                            </label>
+                        </th:block>
+                    </div>
+                </fieldset>
+
+                <div class="form-group" style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
+                    <a th:href="@{/mappa(data_ricerca=${dataSelezionata}, tipo_prenotazione=${tipoPrenotazione})}" class="button button-secondary">Annulla</a>
                     <button type="submit" style="background-color: #4CAF50;">Conferma e Paga</button>
                 </div>
             </form>

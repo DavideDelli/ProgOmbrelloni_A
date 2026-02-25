@@ -46,14 +46,14 @@ public class PrenotazioniServlet extends HttpServlet {
         String messaggioErrore = "";
 
         try (Connection conn = DatabaseManager.getInstance().getConnection()) {
-            // Uniamo contratto, giornodisponibilita e ombrellone per avere tutti i dettagli
-            // Usiamo DISTINCT o GROUP BY per evitare duplicati in caso di abbonamenti settimanali
-            String sql = "SELECT c.numProgr, c.data, c.dataFine, c.importo, o.settore, o.numFila, o.numPostoFila, o.codTipologia " +
+            // Aggiungiamo la JOIN con 'tariffa' per recuperare la descrizione esatta del pacchetto
+            String sql = "SELECT c.numProgr, c.data, c.dataFine, c.importo, o.settore, o.numFila, o.numPostoFila, o.codTipologia, t.descrizione AS nome_tariffa " +
                     "FROM contratto c " +
                     "JOIN giornodisponibilita gd ON c.numProgr = gd.numProgrContratto " +
                     "JOIN ombrellone o ON gd.idOmbrellone = o.id " +
+                    "LEFT JOIN tariffa t ON c.codTariffa = t.codice " +
                     "WHERE c.codiceCliente = ? " +
-                    "GROUP BY c.numProgr, c.data, c.dataFine, c.importo, o.settore, o.numFila, o.numPostoFila, o.codTipologia " +
+                    "GROUP BY c.numProgr, c.data, c.dataFine, c.importo, o.settore, o.numFila, o.numPostoFila, o.codTipologia, t.descrizione " +
                     "ORDER BY c.data DESC";
 
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -69,6 +69,8 @@ public class PrenotazioniServlet extends HttpServlet {
                         preno.put("fila", rs.getInt("numFila"));
                         preno.put("posto", rs.getInt("numPostoFila"));
                         preno.put("tipologia", rs.getString("codTipologia"));
+                        // Ora peschiamo anche la tariffa!
+                        preno.put("tariffa", rs.getString("nome_tariffa"));
                         prenotazioni.add(preno);
                     }
                 }

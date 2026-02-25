@@ -42,7 +42,7 @@
                         <th>N. Contratto</th>
                         <th>Data</th>
                         <th>Ombrellone</th>
-                        <th>Tipologia</th>
+                        <th>Pacchetto Scelto</th>
                         <th>Importo Pagato</th>
                     </tr>
                     </thead>
@@ -55,8 +55,11 @@
                         </td>
                         <td th:text="'Settore ' + ${p.settore} + ' | Fila ' + ${p.fila} + ' | Posto ' + ${p.posto}"></td>
                         <td>
-                            <span th:if="${p.tipologia == 'VIP'}" class="legend-box vip" style="display:inline-block; vertical-align:middle; width:12px; height:12px; margin-right:5px;"></span>
-                            <span th:text="${p.tipologia}"></span>
+                            <div>
+                                <span th:if="${p.tipologia == 'VIP'}" class="legend-box vip" style="display:inline-block; vertical-align:middle; width:12px; height:12px; margin-right:5px;"></span>
+                                <strong th:text="${p.tipologia}"></strong>
+                            </div>
+                            <div style="font-size: 0.85em; opacity: 0.8; margin-top: 4px;" th:text="${p.tariffa != null ? p.tariffa : 'Nessun pacchetto'}"></div>
                         </td>
                         <td><strong th:text="${p.importo} + ' €'"></strong></td>
                     </tr>

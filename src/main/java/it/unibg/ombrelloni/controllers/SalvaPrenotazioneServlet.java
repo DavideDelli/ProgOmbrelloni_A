@@ -50,23 +50,18 @@ public class SalvaPrenotazioneServlet extends HttpServlet {
             conn.setAutoCommit(false);
 
             try {
-                // 1. Recupero dinamico della tariffa (Adattato per robustezza)
-                String sqlPrezzo = "SELECT tar.codice, tar.prezzo FROM tariffa tar " +
-                        "JOIN tipologiatariffa tt ON tar.codice = tt.codTariffa " +
-                        "JOIN ombrellone o ON tt.codTipologia = o.codTipologia " +
-                        "WHERE o.id = ? LIMIT 1";
-
-                String codTariffa = "";
+                // 1. Recupero prezzo della tariffa SCELTA DALL'UTENTE
+                String codTariffaSelezionata = request.getParameter("cod_tariffa");
+                String sqlPrezzo = "SELECT prezzo FROM tariffa WHERE codice = ?";
                 double importoFinale = 0.0;
 
                 try (PreparedStatement stmtPrezzo = conn.prepareStatement(sqlPrezzo)) {
-                    stmtPrezzo.setInt(1, idOmbrellone);
+                    stmtPrezzo.setString(1, codTariffaSelezionata);
                     try (ResultSet rs = stmtPrezzo.executeQuery()) {
                         if (rs.next()) {
-                            codTariffa = rs.getString("codice");
                             importoFinale = rs.getDouble("prezzo");
                         } else {
-                            throw new Exception("Nessuna tariffa valida per questo ombrellone.");
+                            throw new Exception("La tariffa selezionata non è valida.");
                         }
                     }
                 }
@@ -102,7 +97,7 @@ public class SalvaPrenotazioneServlet extends HttpServlet {
                     stmtContratto.setDate(2, sqlDataFine);
                     stmtContratto.setDouble(3, importoFinale);
                     stmtContratto.setString(4, codiceCliente);
-                    stmtContratto.setString(5, codTariffa);
+                    stmtContratto.setString(5, codTariffaSelezionata); // <--- Corretto qui!
                     stmtContratto.executeUpdate();
 
                     try (ResultSet generatedKeys = stmtContratto.getGeneratedKeys()) {
@@ -128,7 +123,7 @@ public class SalvaPrenotazioneServlet extends HttpServlet {
                     }
                 }
 
-                // Se arriviamo qui, è andato tutto bene! Replicato il $pdo->commit()
+                // Se arriviamo qui, è andato tutto bene!
                 conn.commit();
                 messaggio = "Prenotazione confermata con successo! Il tuo numero di contratto è " + nuovoContrattoId + ".";
                 successo = true;

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Admin - Lido Codici Sballati</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+    <style>
+        body.glass-ui .admin-container { max-width: 1200px; margin: 0 auto; }
+        body.glass-ui .riepilogo-box { background: rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.2); box-shadow: none; }
+        body.glass-ui .riepilogo-box a { color: #FFF; text-decoration: underline; font-weight: bold; }
+    </style>
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header>Pannello Amministratore</header>
+    <nav>
+        <a th:href="@{/admin/dashboard}" class="active">Dashboard</a>
+        <a th:href="@{/admin/gestione_tariffe}">Gestione Tariffe</a>
+        <a th:href="@{/admin/gestione_date}">Gestione Date</a>
+        <a th:href="@{/}" target="_blank">Vai al Sito</a>
+        <a th:href="@{/auth/admin_logout}">Logout</a>
+    </nav>
+    <main>
+        <div class="admin-container">
+            <h1 style="color: #3e2723;">Pannello di Controllo</h1>
+            <p style="font-size: 1.1rem; margin-bottom: 30px;">Bentornato. Da qui puoi gestire l'operatività del Lido.</p>
+
+            <div class="riepilogo-box glass-panel" style="text-align: left; padding: 25px;">
+                <h3 style="margin-top: 0; color: #3e2723;">Azioni Rapide</h3>
+                <ul style="line-height: 2.2; list-style: none; padding-left: 0;">
+                    <li>
+                        🚀 <a th:href="@{/admin/gestione_date}">Apertura Stagione</a>: Genera la disponibilità degli ombrelloni per un periodo.
+                    </li>
+                    <li>
+                        💰 <a th:href="@{/admin/gestione_tariffe}">Gestione Listino</a>: Aggiorna i prezzi dei pacchetti (VIP, Standard, ecc).
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <footer>© 2026 - Gestione Lido Codici Sballati</footer>
+</div>
+</body>
+</html>

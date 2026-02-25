@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestione Tariffe - Admin</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header>Listino Prezzi</header>
+    <nav>
+        <a th:href="@{/admin/dashboard}">Dashboard</a>
+        <a th:href="@{/admin/gestione_tariffe}" class="active">Gestione Tariffe</a>
+        <a th:href="@{/admin/gestione_date}">Gestione Date</a>
+        <a th:href="@{/auth/admin_logout}">Logout</a>
+    </nav>
+    <main>
+        <div class="glass-panel">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                <tr style="text-align: left; border-bottom: 2px solid #3e2723;">
+                    <th>Descrizione</th>
+                    <th>Prezzo Attuale</th>
+                    <th>Nuovo Prezzo</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="t : ${tariffe}" style="border-bottom: 1px solid rgba(0,0,0,0.1);">
+                    <td th:text="${t.descrizione}" style="padding: 10px 0;"></td>
+                    <td th:text="${t.prezzo} + ' €'"></td>
+                    <td>
+                        <form th:action="@{/admin/gestione_tariffe}" method="POST" style="display: flex; gap: 5px;">
+                            <input type="hidden" name="codice" th:value="${t.codice}">
+                            <input type="number" name="prezzo" step="0.01" style="width: 80px;" required>
+                            <button type="submit" style="padding: 5px 10px; font-size: 0.8em;">Aggiorna</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+</body>
+</html>

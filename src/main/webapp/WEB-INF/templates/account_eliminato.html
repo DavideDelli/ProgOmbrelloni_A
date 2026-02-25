@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Eliminato</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header>Account Eliminato</header>
+    <main style="text-align: center; padding-top: 50px;">
+        <div class="messaggio-conferma glass-panel" style="max-width: 600px; margin: 0 auto;">
+            <h2>Il tuo account è stato eliminato con successo.</h2>
+            <p>Tutte le tue informazioni e le tue prenotazioni sono state rimosse dal nostro database.</p>
+            <p>Ci dispiace vederti andare via. Speriamo di rivederti in futuro!</p>
+            <a th:href="@{/}" class="button" style="margin-top: 20px;">Torna alla Home Page</a>
+        </div>
+    </main>
+    <footer>© 2026 - Lido Codici Sballati</footer>
+</div>
+</body>
+</html>

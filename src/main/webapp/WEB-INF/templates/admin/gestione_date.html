@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestione Date - Admin</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header>Apertura Stagione</header>
+    <nav>
+        <a th:href="@{/admin/dashboard}">Dashboard</a>
+        <a th:href="@{/admin/gestione_tariffe}">Gestione Tariffe</a>
+        <a th:href="@{/admin/gestione_date}" class="active">Gestione Date</a>
+        <a th:href="@{/auth/admin_logout}">Logout</a>
+    </nav>
+    <main>
+        <div class="glass-panel" style="max-width: 600px; margin: 0 auto;">
+            <h2>Apri Nuove Date</h2>
+            <div th:if="${successo}" class="messaggio-conferma">Date generate con successo!</div>
+
+            <form th:action="@{/admin/gestione_date}" method="POST">
+                <div class="form-group">
+                    <label>Data Inizio:</label>
+                    <input type="date" name="data_inizio" required>
+                </div>
+                <div class="form-group">
+                    <label>Data Fine:</label>
+                    <input type="date" name="data_fine" required>
+                </div>
+                <button type="submit" style="width: 100%;">Genera Disponibilità</button>
+            </form>
+        </div>
+    </main>
+</div>
+</body>
+</html>
