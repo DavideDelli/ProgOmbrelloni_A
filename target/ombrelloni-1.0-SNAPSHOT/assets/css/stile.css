@@ -3,14 +3,14 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap');
 
-body { 
-    margin: 0; 
+body {
+    margin: 0;
     font-family: 'Outfit', sans-serif;
     /* RIPRISTINATO SFONDO CALDO (Sabbia -> Caffè) */
     background: linear-gradient(135deg, #c69c6d 0%, #8b5a2b 50%, #5d3a1a 100%);
     background-attachment: fixed;
-    color: #3e2723; 
-    line-height: 1.6; 
+    color: #3e2723;
+    line-height: 1.6;
     min-height: 100vh;
 }
 
@@ -21,10 +21,10 @@ a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
 /* HEADER & NAVIGAZIONE                */
 /* =================================== */
 
-header { 
+header {
     background: #4e342e; /* Marrone solido caldo */
-    text-align: center; 
-    padding: 1.5rem; 
+    text-align: center;
+    padding: 1.5rem;
     box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     position: relative;
     z-index: 100;
@@ -43,7 +43,7 @@ header h1 {
     color: transparent;
 }
 
-nav { 
+nav {
     background: rgba(255, 255, 255, 0.15); /* Glass Chiaro */
     backdrop-filter: blur(10px);
     width: 100%;
@@ -52,7 +52,7 @@ nav {
     z-index: 99;
 }
 
-nav a { 
+nav a {
     display: inline-block;
     padding: 15px 25px;
     font-size: 1rem;
@@ -77,10 +77,10 @@ nav a.active::after {
 /* Classe base per pannelli */
 .glass-panel, .control-panel {
     /* BIANCO SEMI-TRASPARENTE (Vero Glass) */
-    background: rgba(255, 255, 255, 0.25); 
+    background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(25px) saturate(120%);
     -webkit-backdrop-filter: blur(25px) saturate(120%);
-    border: 1px solid rgba(255, 255, 255, 0.4); 
+    border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 20px;
     /* Ombra marrone calda */
     box-shadow: 0 15px 35px rgba(93, 64, 55, 0.25);
@@ -111,22 +111,74 @@ nav a.active::after {
 /* FORM & INPUTS                       */
 /* =================================== */
 
-.form-group label, .search-group label { 
-    display: block; font-weight: 700; margin-bottom: 8px; 
+.form-group label, .search-group label {
+    display: block; font-weight: 700; margin-bottom: 8px;
     color: #3e2723; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;
 }
 
-input[type="text"], input[type="password"], input[type="date"], input[type="email"], select { 
-    width: 100%; padding: 12px 15px; border-radius: 12px; 
-    border: 1px solid rgba(255, 255, 255, 0.6); 
-    background: rgba(255, 255, 255, 0.5); /* Input chiaro */
+input[type="text"], input[type="password"], input[type="date"], input[type="email"], select {
+    width: 100%; padding: 12px 15px; border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.5);
     color: #3e2723;
     font-family: inherit; font-weight: 600; font-size: 1rem;
     outline: none; transition: all 0.3s; box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
 }
-input:focus, select:focus { 
-    background: #fff; border-color: #8d6e63; 
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4); 
+
+/* Stile personalizzato per il date picker */
+input[type="date"] {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%234e342e' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    width: 30px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+    color: #3e2723;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+}
+
+input[type="date"]::-webkit-datetime-edit-text {
+    color: #8d6e63;
+    padding: 0 2px;
+}
+
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+    color: #3e2723;
+    font-weight: 700;
+    border-radius: 4px;
+    padding: 1px 2px;
+}
+
+input[type="date"]::-webkit-datetime-edit-day-field:focus,
+input[type="date"]::-webkit-datetime-edit-month-field:focus,
+input[type="date"]::-webkit-datetime-edit-year-field:focus {
+    background: rgba(216, 67, 21, 0.15);
+    color: #bf360c;
+    outline: none;
+}
+input:focus, select:focus {
+    background: #fff; border-color: #8d6e63;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4);
 }
 
 /* Bottoni */
@@ -164,11 +216,11 @@ input:focus, select:focus {
 /* =================================== */
 /* MAPPA ELEMENTS                      */
 /* =================================== */
-.spiaggia-mappa-container { 
-    width: 100%; height: calc(100vh - 200px); 
-    border-radius: 30px 30px 0 0; 
+.spiaggia-mappa-container {
+    width: 100%; height: calc(100vh - 200px);
+    border-radius: 30px 30px 0 0;
     overflow: hidden; position: relative;
-    background-color: #e0c29e; 
+    background-color: #e0c29e;
     border: 6px solid rgba(255,255,255,0.3); border-bottom: none;
     box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
 }
@@ -203,38 +255,39 @@ input:focus, select:focus {
 /* Controlli Mappa - MODIFICATO */
 .search-group form { display: flex; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
 
-.radio-group { 
-    background: rgba(255, 255, 255, 0.25); 
-    padding: 6px; 
-    border-radius: 50px; 
-    display: inline-flex; 
-    border: 1px solid rgba(255,255,255,0.4); 
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+.radio-group {
+    display: inline-flex;
+    gap: 6px;
 }
 
-.radio-option { margin: 0; position: relative; cursor: pointer; }
+.radio-option {
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    display: inline-block;
+}
 
 /* Nascondiamo il radio button nativo mantenendo l'accessibilità */
-.radio-option input[type="radio"] { 
-    position: absolute; 
-    opacity: 0; 
-    width: 0; 
-    height: 0; 
+.radio-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
 }
 
 /* Stile del bottone visuale */
-.radio-option span { 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px; /* Spazio tra icona e testo */
-    padding: 10px 24px; 
-    border-radius: 40px; 
-    font-size: 0.9rem; 
-    font-weight: 600; 
-    color: #4e342e; 
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+.radio-option span {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 40px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: rgba(62, 39, 35, 0.45);
+    letter-spacing: 0.5px;
+    transition: all 0.25s ease;
     white-space: nowrap;
+    text-transform: uppercase;
 }
 
 /* Icone SVG dentro lo span */
@@ -244,22 +297,20 @@ input:focus, select:focus {
     stroke: currentColor;
     stroke-width: 2.5;
     fill: none;
+    flex-shrink: 0;
     transition: transform 0.3s ease;
 }
 
 /* Hover */
-.radio-option:hover span { 
-    background: rgba(255, 255, 255, 0.15); 
-    color: #3e2723; 
+.radio-option:hover span {
+    color: rgba(62, 39, 35, 0.75);
 }
-.radio-option:hover span svg { transform: scale(1.1); }
 
 /* Stato ATTIVO (Checked) */
-.radio-option input:checked + span { 
-    background: linear-gradient(135deg, #d84315, #bf360c); 
-    color: #fff; 
-    box-shadow: 0 4px 15px rgba(216, 67, 21, 0.35); 
-    transform: translateY(-1px);
+.radio-option input:checked + span {
+    background: linear-gradient(135deg, #d84315, #bf360c);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(216, 67, 21, 0.35);
 }
 
 /* Legenda */
