@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Esito Prenotazione</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header><h1>Esito Prenotazione</h1></header>
+    <main style="padding-top: 50px;">
+        <div th:class="'messaggio ' + (${successo} ? 'successo' : 'errore')">
+            <h2 th:text="${successo} ? 'Congratulazioni!' : 'Attenzione!'">Esito</h2>
+            <p th:text="${messaggio}"></p>
+            <a th:href="@{/mappa}" class="button" style="text-decoration: none; display:inline-block; margin-top: 20px;">Torna alla Mappa</a>
+        </div>
+    </main>
+</div>
+</body>
+</html>

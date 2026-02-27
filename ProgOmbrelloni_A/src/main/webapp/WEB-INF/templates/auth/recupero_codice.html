@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recupero Codice - LIDO CODICI SBALLATI</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header><h1>Recupero Codice</h1></header>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/accesso}">Accedi</a>
+        <a th:href="@{/registrazione}">Registrati</a>
+    </nav>
+    <main>
+        <form th:action="@{/auth/processa_recupero}" method="POST" class="form-prenotazione glass-panel">
+            <h3>Inserisci i tuoi dati per recuperare il Codice Cliente</h3>
+
+            <div th:if="${errore}" class="messaggio errore glass-panel" style="margin-bottom: 20px;">
+                <p th:text="${errore}"></p>
+            </div>
+
+            <div th:if="${codiceRecuperato}" class="messaggio-conferma glass-panel" style="margin-bottom: 20px;">
+                <p>Bentornato! Il tuo codice cliente è:</p>
+                <h2 style="font-size: 2rem; color: #3e2723; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 8px;" th:text="${codiceRecuperato}"></h2>
+                <a th:href="@{/accesso}" class="button" style="margin-top: 15px; display: inline-block;">Vai al Login</a>
+            </div>
+
+            <th:block th:unless="${codiceRecuperato}">
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="cognome">Cognome:</label>
+                    <input type="text" id="cognome" name="cognome" required>
+                </div>
+                <div class="form-group">
+                    <label for="dataNascita">Data di Nascita:</label>
+                    <input type="date" id="dataNascita" name="dataNascita" required>
+                </div>
+                <div class="form-group" style="text-align: center;">
+                    <button type="submit">Recupera Codice</button>
+                </div>
+            </th:block>
+        </form>
+    </main>
+    <footer>© 2026 - Lido Codici Sballati</footer>
+</div>
+</body>
+</html>

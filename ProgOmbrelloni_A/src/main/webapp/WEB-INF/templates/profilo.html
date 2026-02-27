@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Il mio Profilo - Lido Codici Sballati</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+    <style>
+        /* Modale Eliminazione Account */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .modal-box h3 { color: #c62828; margin-top: 0; font-size: 1.4rem; }
+        .modal-box p { color: #3e2723; margin: 10px 0; }
+        .modal-actions { display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
+        .btn-elimina-confirm {
+            padding: 12px 28px; background: #c62828; color: #fff;
+            border: none; border-radius: 50px; font-weight: 700;
+            font-size: 1rem; cursor: pointer; transition: background 0.2s;
+        }
+        .btn-elimina-confirm:hover { background: #b71c1c; }
+        .link-elimina {
+            background: none; border: none; color: #8d6e63;
+            font-weight: 600; font-size: 0.9rem; cursor: pointer;
+            padding: 0; text-decoration: underline;
+            transition: color 0.3s;
+        }
+        .link-elimina:hover { color: #c62828; }
+    </style>
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header><h1>Il mio Profilo</h1></header>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/mappa}">Mappa</a>
+        <a th:href="@{/le_mie_prenotazioni}">Prenotazioni</a>
+        <a th:href="@{/profilo}" class="active">Profilo</a>
+    </nav>
+    <main>
+        <div class="glass-panel" style="max-width: 600px; margin: 0 auto;">
+            <h3>Dati Personali</h3>
+
+            <div th:if="${not #strings.isEmpty(messaggioSuccesso)}" class="messaggio-conferma" th:text="${messaggioSuccesso}"></div>
+            <div th:if="${not #strings.isEmpty(messaggioErrore)}" class="messaggio errore" th:text="${messaggioErrore}"></div>
+
+            <div style="background: rgba(255,255,255,0.5); border-radius: 16px; padding: 25px; text-align: center; margin-bottom: 30px; border: 1px dashed #8d6e63;">
+                <p style="margin: 0; color: #5d4037; font-weight: 700; letter-spacing: 1px; font-size: 0.9rem;">IL TUO CODICE CLIENTE</p>
+                <span style="font-size: 2.5rem; font-weight: 900; color: #3e2723; letter-spacing: 3px;" th:text="${codiceCliente}"></span>
+            </div>
+
+            <form th:action="@{/profilo}" method="POST">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" th:value="${nomeCliente}" required>
+                </div>
+                <div class="form-group">
+                    <label for="cognome">Cognome</label>
+                    <input type="text" id="cognome" name="cognome" th:value="${cognomeCliente}" required>
+                </div>
+                <div class="form-group">
+                    <label for="dataNascita">Data di Nascita</label>
+                    <input type="date" id="dataNascita" name="dataNascita" th:value="${dataNascita}" required>
+                </div>
+
+                <div style="margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 25px; display: flex; justify-content: space-between; align-items: center;">
+                    <button type="button" class="link-elimina" onclick="document.getElementById('modalElimina').classList.add('active')">
+                        Elimina Account
+                    </button>
+
+                    <div style="display: flex; gap: 15px;">
+                        <a th:href="@{/auth/logout}" class="button button-secondary">Logout</a>
+                        <button type="submit">Salva</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+    <footer>© 2026 - Lido Codici Sballati</footer>
+</div>
+
+<!-- MODALE ELIMINAZIONE ACCOUNT -->
+<div class="modal-overlay" id="modalElimina">
+    <div class="modal-box">
+        <h3>⚠️ Sei sicuro?</h3>
+        <p>Stai per eliminare definitivamente il tuo account.</p>
+        <p><strong th:text="${nomeCliente} + ' ' + ${cognomeCliente}"></strong><br>
+           <small style="color: #8d6e63;" th:text="'Codice: ' + ${codiceCliente}"></small></p>
+        <p style="color: #c62828; font-weight: 600; font-size: 0.9rem;">Questa azione è irreversibile. Tutte le prenotazioni verranno cancellate.</p>
+        <div class="modal-actions">
+            <button class="button button-secondary" onclick="document.getElementById('modalElimina').classList.remove('active')">
+                Annulla
+            </button>
+            <form th:action="@{/elimina_account}" method="POST" style="display: inline;">
+                <button type="submit" class="btn-elimina-confirm">Sì, elimina il mio account</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

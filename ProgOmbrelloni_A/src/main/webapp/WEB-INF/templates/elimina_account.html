@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Elimina Account - Lido Codici Sballati</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header><h1>Eliminazione Account</h1></header>
+    <main style="padding-top: 50px;">
+        <div class="form-prenotazione glass-panel" style="max-width: 700px; text-align: center; margin: 0 auto;">
+            <h3 style="color: #c82333; border-color: #c82333;">Sei assolutamente sicuro?</h3>
+            <p style="text-align: left;">Stai per eliminare definitivamente il tuo account <strong th:text="${nomeCliente}"></strong> (Codice: <span th:text="${codiceCliente}"></span>).</p>
+            <p style="text-align: left;"><strong>Questa azione è irreversibile.</strong> Tutte le tue prenotazioni verranno cancellate e non potrai più accedere al tuo profilo.</p>
+
+            <form th:action="@{/elimina_account}" method="POST" style="margin-top: 30px; display: flex; justify-content: space-between; align-items: center;">
+                <a th:href="@{/profilo}" class="button button-secondary">Annulla</a>
+                <button type="submit" style="background-color: #dc3545;">Sì, Elimina il mio Account</button>
+            </form>
+        </div>
+    </main>
+    <footer>© 2026 - Lido Codici Sballati</footer>
+</div>
+</body>
+</html>

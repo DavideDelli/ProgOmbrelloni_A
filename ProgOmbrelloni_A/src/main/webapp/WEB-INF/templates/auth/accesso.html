@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accesso - LIDO CODICI SBALLATI</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header><h1>Accedi</h1></header>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/accesso}" class="active">Accedi</a>
+        <a th:href="@{/registrazione}">Registrati</a>
+    </nav>
+    <main>
+        <form th:action="@{/auth/processa_accesso}" method="POST" class="form-prenotazione glass-panel">
+            <h3>Accedi con il tuo Codice Cliente</h3>
+            
+            <div th:if="${param.errore}" class="messaggio errore glass-panel" style="margin-bottom: 20px;">
+                <p>Codice Cliente non valido o non trovato. Riprova.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="codice_cliente">Il tuo Codice Cliente:</label>
+                <input type="text" id="codice_cliente" name="codice_cliente" placeholder="Es. CLAB167..." required>
+            </div>
+            
+            <div class="form-group" style="text-align: center;">
+                <button type="submit">Entra</button>
+            </div>
+        </form>
+        <div style="text-align: center; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px;">
+            <p style="font-size: 0.9em; color: #FFF; margin-bottom: 10px;">Accesso riservato allo staff</p>
+            <a th:href="@{/auth/admin_login}" class="button button-secondary" style="font-size: 0.8em; padding: 8px 15px; background-color: rgba(0,0,0,0.3);">Area Amministratore</a>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+         <a th:href="@{/recupero_codice}" style="font-size: 0.9em; color: #FFF; text-decoration: none;">Hai dimenticato il codice?</a>
+        </div>
+    </main>
+    <footer>© 2026 - Lido Codici Sballati</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login - Lido Codici Sballati</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header><h1>Area Amministratore</h1></header>
+    <nav>
+        <a th:href="@{/}">← Torna al Sito</a>
+        <a th:href="@{/accesso}">Accesso Clienti</a>
+    </nav>
+    <main>
+        <form th:action="@{/auth/admin_login}" method="POST" class="form-prenotazione glass-panel" style="max-width: 500px; margin: 0 auto;">
+            <h3>Login Amministratore</h3>
+
+            <div th:if="${errore}" class="messaggio errore glass-panel" style="margin-bottom: 20px;">
+                <p>Password errata.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group" style="text-align: center;">
+                <button type="submit">Accedi</button>
+            </div>
+        </form>
+    </main>
+    <footer>© 2026 - Progetto Programmazione WEB</footer>
+</div>
+</body>
+</html>

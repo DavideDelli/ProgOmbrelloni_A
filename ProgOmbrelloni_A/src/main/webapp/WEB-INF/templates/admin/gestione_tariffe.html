@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestione Tariffe - Admin</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+    <style>
+        .tariffe-table { width: 100%; border-collapse: collapse; }
+        .tariffe-table th {
+            text-align: left;
+            padding: 10px 15px;
+            border-bottom: 2px solid rgba(62,39,35,0.3);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #5d4037;
+        }
+        .tariffe-table th.num-col { text-align: right; }
+        .tariffe-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            color: #3e2723;
+            vertical-align: middle;
+        }
+        .tariffe-table td.num-col {
+            text-align: right;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .tariffe-table tr:hover td { background: rgba(255,255,255,0.4); }
+        .inline-form { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+        .inline-form input[type="number"] {
+            width: 90px;
+            padding: 8px 10px;
+            text-align: right;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.7);
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #3e2723;
+        }
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            background: linear-gradient(135deg, #8d6e63, #5d4037);
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+        }
+        .btn-small:hover { background: linear-gradient(135deg, #a1887f, #6d4c41); }
+    </style>
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header><h1>Listino Prezzi</h1></header>
+    <nav>
+        <a th:href="@{/admin/dashboard}">Dashboard</a>
+        <a th:href="@{/admin/gestione_tariffe}" class="active">Gestione Tariffe</a>
+        <a th:href="@{/admin/gestione_date}">Gestione Date</a>
+        <a th:href="@{/auth/admin_logout}">Logout</a>
+    </nav>
+    <main>
+        <div class="glass-panel">
+            <h2 style="margin-top: 0;">Tariffe Attive</h2>
+            <table class="tariffe-table">
+                <thead>
+                    <tr>
+                        <th>Descrizione</th>
+                        <th class="num-col">Prezzo Attuale</th>
+                        <th class="num-col" style="min-width: 220px;">Aggiorna Prezzo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="t : ${tariffe}">
+                        <td th:text="${t.descrizione}"></td>
+                        <td class="num-col" th:text="${#numbers.formatDecimal(t.prezzo, 1, 2)} + ' €'"></td>
+                        <td class="num-col">
+                            <form th:action="@{/admin/gestione_tariffe}" method="POST" class="inline-form">
+                                <input type="hidden" name="codice" th:value="${t.codice}">
+                                <input type="number" name="prezzo" step="0.01" min="0" placeholder="Nuovo €" required>
+                                <button type="submit" class="btn-small">Salva</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <footer>© 2026 - Gestione Lido Codici Sballati</footer>
+</div>
+</body>
+</html>

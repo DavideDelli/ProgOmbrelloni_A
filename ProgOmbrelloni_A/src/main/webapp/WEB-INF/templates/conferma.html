@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Conferma Prenotazione - Lido Codici Sballati</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header><h1>Riepilogo Prenotazione</h1></header>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/mappa}">Mappa</a>
+        <a th:href="@{/le_mie_prenotazioni}">Prenotazioni</a>
+        <a th:href="@{/profilo}">Profilo</a>
+    </nav>
+    <main>
+        <div th:if="${not #strings.isEmpty(errore)}" class="messaggio errore glass-panel">
+            <h2>Errore</h2>
+            <p th:text="${errore}"></p>
+            <a th:href="@{/mappa}" class="button" style="margin-top: 1rem;">Torna alla Mappa</a>
+        </div>
+
+        <div th:if="${#strings.isEmpty(errore)}" class="form-prenotazione glass-panel" style="max-width: 600px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="font-size: 2.2em; border: none; color: #FFF;">Un ultimo passo...</h2>
+                <p style="font-size: 1.2em; margin-top: 0;">Controlla i dettagli e seleziona il pacchetto.</p>
+            </div>
+
+            <div class="riepilogo-box" style="background: rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.2); box-shadow: none;">
+                <p><strong>Tipo Prenotazione:</strong> <span style="text-transform: capitalize;" th:text="${tipoPrenotazione}"></span></p>
+                <p><strong>Data Inizio:</strong> <strong th:text="${dataSelezionata}"></strong></p>
+                <p><strong>Ombrellone:</strong> Settore <span th:text="${ombrellone.settore}"></span>, Fila <span th:text="${ombrellone.numFila}"></span>, Posto <span th:text="${ombrellone.numPostoFila}"></span></p>
+            </div>
+
+            <form th:action="@{/salva_prenotazione}" method="POST" style="margin-top: 2rem;">
+                <input type="hidden" name="id_ombrellone" th:value="${idOmbrellone}">
+                <input type="hidden" name="data_prenotazione" th:value="${dataSelezionata}">
+                <input type="hidden" name="tipo_prenotazione" th:value="${tipoPrenotazione}">
+
+                <fieldset style="border: 1px solid rgba(255,255,255,0.2); background: transparent;">
+                    <legend style="color: #FFF;">Scegli il tuo Pacchetto</legend>
+                    <div class="form-group">
+                        <th:block th:each="tariffa, iterStat : ${tariffe}">
+                            <label style="display: block; margin-bottom: 10px; background: rgba(0,0,0,0.1); padding: 10px; border-radius: 8px;">
+                                <input type="radio" name="cod_tariffa" th:value="${tariffa.codice}" th:checked="${iterStat.index == 0}">
+                                <span th:text="${tariffa.descrizione}"></span>
+                                (<strong th:text="${tariffa.prezzo} + ' €'"></strong>)
+                            </label>
+                        </th:block>
+                    </div>
+                </fieldset>
+
+                <div class="form-group" style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
+                    <a th:href="@{/mappa(data_ricerca=${dataSelezionata}, tipo_prenotazione=${tipoPrenotazione})}" class="button button-secondary">Annulla</a>
+                    <button type="submit" style="background-color: #4CAF50;">Conferma e Paga</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <footer>© 2026 - Lido Codici Sballati</footer>
+</div>
+</body>
+</html>

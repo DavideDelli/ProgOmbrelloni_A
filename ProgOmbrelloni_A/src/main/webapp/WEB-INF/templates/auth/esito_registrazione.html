@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Esito Registrazione</title>
+    <link rel="stylesheet" th:href="@{/assets/css/stile.css}">
+</head>
+<body class="glass-ui">
+<div class="container">
+    <header><h1>Esito Registrazione</h1></header>
+    <main style="text-align: center;">
+
+        <div th:if="${not #lists.isEmpty(errori)}" class="messaggio errore glass-panel">
+            <h2>Errore nella registrazione</h2>
+            <ul style="text-align: left; display: inline-block; margin-top: 10px;">
+                <li th:each="err : ${errori}" th:text="${err}">Errore</li>
+            </ul>
+            <br>
+            <a th:href="@{/registrazione}" class="button" style="margin-top: 20px;">Torna e Riprova</a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(errori)}" class="messaggio-conferma glass-panel">
+            <h2 th:text="${messaggio}">Registrazione completata!</h2>
+            <p style="font-size: 1.2em;">Conserva con cura il tuo Codice Cliente. Ti servirà per accedere e prenotare.</p>
+            <div style="font-size: 1.6em; font-weight: bold; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.1);" th:text="${codiceClienteGenerato}">
+                CODICE
+            </div>
+            <a th:href="@{/accesso}" class="button" style="margin-top: 20px;">Vai alla pagina di Accesso</a>
+        </div>
+
+    </main>
+    <footer>© 2026 - Lido Codici Sballati</footer>
+</div>
+</body>
+</html>
