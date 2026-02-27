@@ -277,7 +277,10 @@ Write-Info "(Al primo avvio Maven scarica le dipendenze: 1-2 minuti)"
 Write-Host ""
 
 Set-Location $ProjectDir
-& $MvnCmd clean compile -q
+
+$SslFix = @("-Dmaven.wagon.http.ssl.insecure=true", "-Dmaven.wagon.http.ssl.allowall=true", "-Dmaven.wagon.http.ssl.ignore.validity.dates=true")
+
+& $MvnCmd clean compile -q @SslFix
 if ($LASTEXITCODE -ne 0) { Write-Fail "Compilazione fallita. Controlla il codice sorgente." }
 
 Write-Ok "Compilazione completata"
@@ -292,6 +295,6 @@ Write-Host "   Per fermare il server: premi Ctrl+C"
 Write-Host "  =====================================================" -ForegroundColor Green
 Write-Host ""
 
-& $MvnCmd tomcat7:run
+& $MvnCmd tomcat7:run @SslFix
 
 Read-Host "Premere INVIO per chiudere..."
