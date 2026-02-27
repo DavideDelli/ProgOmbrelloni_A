@@ -277,10 +277,10 @@ Write-Info "(Al primo avvio Maven scarica le dipendenze: 1-2 minuti)"
 Write-Host ""
 
 Set-Location $ProjectDir
+# Forza Java a usare il portachiavi di sicurezza di Windows invece del suo
+$env:MAVEN_OPTS = "-Djavax.net.ssl.trustStoreType=WINDOWS-ROOT -Djavax.net.ssl.trustStore=NONE"
+& $MvnCmd clean compile -q
 
-$SslFix = @("-Dmaven.wagon.http.ssl.insecure=true", "-Dmaven.wagon.http.ssl.allowall=true", "-Dmaven.wagon.http.ssl.ignore.validity.dates=true")
-
-& $MvnCmd clean compile -q @SslFix
 if ($LASTEXITCODE -ne 0) { Write-Fail "Compilazione fallita. Controlla il codice sorgente." }
 
 Write-Ok "Compilazione completata"
