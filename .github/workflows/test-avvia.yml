@@ -1,0 +1,35 @@
+name: Test Avvia su Windows Pulito
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:   # permette di lanciarlo manualmente dal sito
+
+jobs:
+  test-windows:
+    runs-on: windows-latest   # macchina Windows 11 pulita nel cloud
+
+    steps:
+      - name: Checkout progetto
+        uses: actions/checkout@v4
+
+      - name: Mostra stato iniziale (Java/Maven/MySQL assenti)
+        run: |
+          Write-Host "=== Stato iniziale della macchina ===" -ForegroundColor Cyan
+          java -version 2>&1 || Write-Host "Java: NON presente" -ForegroundColor Yellow
+          mvn -version 2>&1  || Write-Host "Maven: NON presente" -ForegroundColor Yellow
+          mysql --version 2>&1 || Write-Host "MySQL: NON presente" -ForegroundColor Yellow
+        shell: pwsh
+
+      - name: Esegui avvia.ps1
+        run: |
+          powershell -ExecutionPolicy Bypass -File "${{ github.workspace }}\avvia.ps1" -ScriptDir "${{ github.workspace }}"
+        shell: cmd
+        timeout-minutes: 20   # se si blocca, dopo 20 min fallisce con errore chiaro
+
+      - name: Verifica risultato
+        run: |
+          Write-Host "=== Stato finale ===" -ForegroundColor Cyan
+          java -version 2>&1
+          mvn -version 2>&1
+        shell: pwsh
