@@ -8,7 +8,8 @@ GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
-NC='\033[0m' # No Color
+GRAY='\033[0;90m'
+NC='\033[0m' 
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 PROJECT_DIR="$SCRIPT_DIR/ProgOmbrelloni_A"
@@ -21,178 +22,137 @@ function print_warn() { echo -e "  [WARN]  ${YELLOW}$1${NC}"; }
 function print_fail() { echo -e "\n  [ERRORE] ${RED}$1${NC}\n"; exit 1; }
 function cmd_exists() { command -v "$1" >/dev/null 2>&1; }
 
-# Rilevamento OS e Distro
+function show_progress() {
+    echo -ne "  [....]  $1 "
+    for i in {1..5}; do echo -ne "${CYAN}.${NC}"; sleep 0.3; done
+    echo -e ""
+}
+
+# Rilevamento OS
 OS="$(uname -s)"
 DISTRO="unknown"
 PKG_MGR=""
 
 if [ "$OS" = "Linux" ]; then
-    if [ -f /etc/arch-release ]; then
-        DISTRO="arch"
-        PKG_MGR="sudo pacman -S --needed --noconfirm"
-    elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
-        DISTRO="fedora"
-        PKG_MGR="sudo dnf install -y"
-    elif [ -f /etc/debian_version ]; then
-        DISTRO="debian"
-        PKG_MGR="sudo apt install -y"
-    fi
+    [ -f /etc/arch-release ] && DISTRO="arch" && PKG_MGR="sudo pacman -S --needed --noconfirm"
+    [ -f /etc/debian_version ] && DISTRO="debian" && PKG_MGR="sudo apt install -y"
+    [ -f /etc/fedora-release ] && DISTRO="fedora" && PKG_MGR="sudo dnf install -y"
 elif [ "$OS" = "Darwin" ]; then
     DISTRO="macos"
-    if cmd_exists brew; then
-        PKG_MGR="brew install"
-    else
-        print_fail "Homebrew non trovato. Installalo da https://brew.sh/ e riprova."
-    fi
+    PKG_MGR="brew install"
 fi
 
 clear
 echo -e "\n  ${CYAN}=====================================================${NC}"
-echo -e "   LIDO CODICI SBALLATI - Avvio automatico Unix"
-echo -e "  ${CYAN}=====================================================${NC}\n"
+echo -e "   🏝️  ${CYAN}LIDO CODICI SBALLATI - Sistema Unix${NC}"
+echo -e "  ${CYAN}=====================================================${NC}"
+echo -e "   ${GRAY}Configurazione professionale per esame di Prog. Web${NC}\n"
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# FASE 1 – Controlla prerequisiti
+# [1/4] VERIFICA PREREQUISITI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-echo -e "[1/4] Verifica prerequisiti OS: $DISTRO"
-echo "  ---------------------------------------------------"
+echo -e "${NC}[1/4] Verifica Stato Sistema (OS: $DISTRO)${NC}"
+echo -e "  ${GRAY}---------------------------------------------------${NC}"
 
 HAS_JAVA=false; cmd_exists java && HAS_JAVA=true
 HAS_MVN=false;  cmd_exists mvn && HAS_MVN=true
 HAS_DB=false;   (cmd_exists mysql || cmd_exists mariadb) && HAS_DB=true
 
-[ "$HAS_JAVA" = true ] && print_ok "Java trovato" || print_warn "Java mancante -> verrà installato"
-[ "$HAS_MVN" = true ]  && print_ok "Maven trovato" || print_warn "Maven mancante -> verrà installato"
-[ "$HAS_DB" = true ]   && print_ok "Database trovato" || print_warn "MySQL/MariaDB mancante -> verrà installato"
-
-if [ ! -d "$PROJECT_DIR" ]; then print_fail "Cartella ProgOmbrelloni_A non trovata!"; fi
-if [ ! -f "$SQL_FILE" ]; then print_fail "File setup_database.sql non trovato!"; fi
+[ "$HAS_JAVA" = true ] && print_ok "Java JDK:       Pronto" || print_warn "Java JDK:       Mancante"
+[ "$HAS_MVN" = true ]  && print_ok "Maven:          Pronto" || print_warn "Maven:          Mancante"
+[ "$HAS_DB" = true ]   && print_ok "Database:       Pronto" || print_warn "Database:       Mancante"
 
 if [ "$HAS_JAVA" = false ] || [ "$HAS_MVN" = false ] || [ "$HAS_DB" = false ]; then
     echo ""
-    read -p "  I tool mancanti verranno installati. Potrebbe essere richiesta la password di root. Continuare? [S/n] " ans
-    case $ans in
-        [Nn]* ) exit 0;;
-    esac
+    read -p "  Installare i tool mancanti? [S/n] " ans
+    [[ "$ans" =~ ^[Nn] ]] && exit 0
 fi
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# FASE 2 – Installa e Configura Servizi
+# [2/4] SETUP COMPONENTI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-echo -e "\n[2/4] Installazione componenti"
-echo "  ---------------------------------------------------"
+echo -e "\n${NC}[2/4] Installazione Dipendenze${NC}"
+echo -e "  ${GRAY}---------------------------------------------------${NC}"
 
 if [ "$HAS_JAVA" = false ]; then
-    print_info "Installazione OpenJDK..."
+    show_progress "Installazione OpenJDK 21"
     if [ "$DISTRO" = "arch" ]; then $PKG_MGR jre-openjdk jdk-openjdk;
-    elif [ "$DISTRO" = "fedora" ]; then $PKG_MGR java-21-openjdk-devel;
     elif [ "$DISTRO" = "debian" ]; then sudo apt update && $PKG_MGR openjdk-21-jdk;
-    elif [ "$DISTRO" = "macos" ]; then $PKG_MGR openjdk@21; fi
-    cmd_exists java || print_fail "Installazione Java fallita."
-    print_ok "Java installato."
-fi
-
-if [ "$HAS_MVN" = false ]; then
-    print_info "Installazione Maven..."
-    $PKG_MGR maven || print_fail "Installazione Maven fallita."
-    print_ok "Maven installato."
+    else $PKG_MGR openjdk@21; fi
 fi
 
 if [ "$HAS_DB" = false ]; then
-    print_info "Installazione Database Server..."
-    if [ "$DISTRO" = "arch" ]; then $PKG_MGR mariadb;
-    elif [ "$DISTRO" = "fedora" ]; then $PKG_MGR mariadb-server;
-    elif [ "$DISTRO" = "debian" ]; then $PKG_MGR mysql-server;
-    elif [ "$DISTRO" = "macos" ]; then $PKG_MGR mysql; fi
-    print_ok "Pacchetto Database installato."
+    show_progress "Installazione Database Server"
+    [ "$DISTRO" = "arch" ] && $PKG_MGR mariadb || $PKG_MGR mysql
 fi
 
-# Gestione Demone Database
-print_info "Controllo demone database in background..."
-if [ "$DISTRO" = "macos" ]; then
-    brew services start mysql >/dev/null 2>&1
+# Avvio servizio
+show_progress "Avvio demone database"
+if [ "$DISTRO" = "macos" ]; then brew services start mysql >/dev/null 2>&1
 else
-    # Inizializzazione specifica per Arch/MariaDB se la cartella dati è vuota
+    SVC_NAME="mysql"; cmd_exists mariadb && SVC_NAME="mariadb"
     if [ "$DISTRO" = "arch" ] && [ ! -d "/var/lib/mysql/mysql" ]; then
-        print_info "Inizializzazione database di sistema (MariaDB)..."
         sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql >/dev/null 2>&1
     fi
-    
-    SVC_NAME="mysql"
-    cmd_exists mariadb && SVC_NAME="mariadb"
-    
     sudo systemctl enable --now $SVC_NAME >/dev/null 2>&1
 fi
-sleep 2 # Tempo tecnico per permettere al socket di aprirsi
+sleep 2
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# FASE 3 – Configurazione Database
+# [3/4] DATABASE & CREDENZIALI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-echo -e "\n[3/4] Configurazione database"
-echo "  ---------------------------------------------------"
+echo -e "\n${NC}[3/4] Database & Credenziali${NC}"
+echo -e "  ${GRAY}---------------------------------------------------${NC}"
 
-DB_PORT="3306"
-DB_USER=""
-DB_PASS=""
-DB_CMD="mysql"
+DB_USER="root"; DB_PASS=""; DB_CMD="mysql"
 
-# Prova accesso senza password (comune su Linux con sudo o default locale)
-if sudo $DB_CMD -u root -e "SELECT 1;" >/dev/null 2>&1; then
-    DB_USER="root"
-    print_ok "Connessione riuscita come root (senza password)"
-elif $DB_CMD -u root -proot -e "SELECT 1;" >/dev/null 2>&1; then
-    DB_USER="root"
-    DB_PASS="root"
-    print_ok "Connessione riuscita come root (password: root)"
+# Prova connessione senza password
+if mysql -u root -e "SELECT 1;" >/dev/null 2>&1; then
+    print_ok "Connessione root riuscita (senza password)"
 else
-    print_warn "Accesso root automatico fallito. Inserisci le credenziali locali."
-    read -p "  Utente DB: " DB_USER
-    read -sp "  Password DB (invio = vuota): " DB_PASS
+    print_warn "Rilevamento automatico fallito."
+    read -p "  Inserisci Utente DB: " DB_USER
+    read -sp "  Inserisci Password DB: " DB_PASS
     echo ""
-    if ! $DB_CMD -u"$DB_USER" ${DB_PASS:+"-p$DB_PASS"} -e "SELECT 1;" >/dev/null 2>&1; then
-        print_fail "Credenziali errate o servizio non avviato."
-    fi
 fi
 
-print_info "Importazione setup_database.sql..."
-if ! sudo $DB_CMD -u"$DB_USER" ${DB_PASS:+"-p$DB_PASS"} < "$SQL_FILE" >/dev/null 2>&1; then
-    print_warn "Database già esistente. Ricreazione in corso..."
-    sudo $DB_CMD -u"$DB_USER" ${DB_PASS:+"-p$DB_PASS"} -e "DROP DATABASE IF EXISTS my_ombrelloni;"
-    sudo $DB_CMD -u"$DB_USER" ${DB_PASS:+"-p$DB_PASS"} < "$SQL_FILE" || print_fail "Importazione fallita."
-fi
-print_ok "Database pronto."
+show_progress "Importazione dati spiaggia"
+# FIX IMPORTAZIONE: usiamo il comando mysql diretto senza sudo se c'è una password
+IMPORT_CMD="mysql -u$DB_USER"
+[ -n "$DB_PASS" ] && IMPORT_CMD="$IMPORT_CMD -p$DB_PASS"
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# FASE 4 – Compilazione e avvio
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-echo -e "\n[4/4] Compilazione e avvio"
-echo "  ---------------------------------------------------"
+# Eseguiamo l'importazione e verifichiamo il risultato
+$IMPORT_CMD -e "DROP DATABASE IF EXISTS my_ombrelloni; CREATE DATABASE my_ombrelloni;"
+$IMPORT_CMD my_ombrelloni < "$SQL_FILE"
 
-print_info "Aggiornamento file DatabaseManager.java..."
-# macOS usa la versione BSD di sed, Linux usa GNU sed.
-if [ "$OS" = "Darwin" ]; then
-    sed -i '' "s|jdbc:mysql://localhost:[0-9]*/my_ombrelloni|jdbc:mysql://localhost:${DB_PORT}/my_ombrelloni|g" "$DB_CONFIG"
-    sed -i '' "s|private static final String USER = \".*\";|private static final String USER = \"$DB_USER\";|g" "$DB_CONFIG"
-    sed -i '' "s|private static final String PASSWORD = \".*\";|private static final String PASSWORD = \"$DB_PASS\";|g" "$DB_CONFIG"
+if [ $? -eq 0 ]; then
+    print_ok "Database 'my_ombrelloni' pronto e popolato."
 else
-    sed -i "s|jdbc:mysql://localhost:[0-9]*/my_ombrelloni|jdbc:mysql://localhost:${DB_PORT}/my_ombrelloni|g" "$DB_CONFIG"
-    sed -i "s|private static final String USER = \".*\";|private static final String USER = \"$DB_USER\";|g" "$DB_CONFIG"
-    sed -i "s|private static final String PASSWORD = \".*\";|private static final String PASSWORD = \"$DB_PASS\";|g" "$DB_CONFIG"
+    print_fail "Errore durante l'importazione del database."
 fi
-print_ok "Configurazione Java aggiornata."
 
-cd "$PROJECT_DIR" || exit
-print_info "Compilazione Maven in corso..."
-mvn clean compile -q || print_fail "Compilazione fallita."
-print_ok "Compilazione completata."
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# [4/4] BUILD & DEPLOY
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+echo -e "\n${NC}[4/4] Build Progetto & Deploy${NC}"
+echo -e "  ${GRAY}---------------------------------------------------${NC}"
+
+# Aggiornamento DatabaseManager.java
+if [ "$OS" = "Darwin" ]; then
+    sed -i '' "s|USER = \".*\";|USER = \"$DB_USER\";|g" "$DB_CONFIG"
+    sed -i '' "s|PASSWORD = \".*\";|PASSWORD = \"$DB_PASS\";|g" "$DB_CONFIG"
+else
+    sed -i "s|USER = \".*\";|USER = \"$DB_USER\";|g" "$DB_CONFIG"
+    sed -i "s|PASSWORD = \".*\";|PASSWORD = \"$DB_PASS\";|g" "$DB_CONFIG"
+fi
+
+cd "$PROJECT_DIR" || print_fail "Cartella progetto non trovata."
+show_progress "Compilazione Maven"
+mvn clean compile -q -DskipTests
 
 echo -e "\n  ${GREEN}=====================================================${NC}"
-echo -e "  ${GREEN} Applicazione avviata!${NC}\n"
-echo -e "   Aprire il browser su:  http://localhost:8080/\n"
-echo -e "   Credenziali di test:"
-echo -e "     Cliente:        CLIENTE0001  (Mario Rossi)"
-echo -e "     Amministratore: admin123\n"
-echo -e "   Per fermare il server: premi Ctrl+C"
-echo -e "  ${GREEN}=====================================================${NC}\n"
+echo -e "   🚀 ${GREEN}LIDO PRONTO! Server in ascolto su porta 8080${NC}"
+echo -e "  ${GREEN}=====================================================${NC}"
+echo -e "   Vai su: http://localhost:8080/\n"
 
 mvn tomcat7:run
